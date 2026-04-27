@@ -93,30 +93,26 @@ def _rss_fetch(rss_url: str) -> list[dict]:
 
     feed = feedparser.parse(rss_url)
     if getattr(feed, "bozo", False):
-        exc = getattr(feed, "bozo_exception", None)
-        msg = str(exc) if exc else "Flux RSS invalide"
-        raise RuntimeError(f"Erreur de lecture RSS: {msg}")
+        return []
 
     entries = list(getattr(feed, "entries", []) or [])
-    if not entries:
-        raise RuntimeError("Aucune entrée RSS trouvée (feed vide).")
     return entries
+
+
+def _build_google_news_rss_url(keyword: str) -> str:
+    q = urllib.parse.quote_plus(f"{keyword} when:30d")
+    return f"https://news.google.com/rss/search?q={q}&hl=fr&gl=FR&ceid=FR:fr"
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Fetch 50 AI news items via Google News RSS and overwrite news.json."
-    )
-    parser.add_argument(
-        "--rss",
-        default="https://news.google.com/rss/search?q=intelligence+artificielle+when:30d&hl=fr&gl=FR&ceid=FR:fr",
-        help="URL RSS Google News à lire.",
+        description="Fetch 100 AI news items via multiple Google News RSS feeds."
     )
     parser.add_argument(
         "--count",
         type=int,
-        default=50,
-        help="Nombre d'articles à récupérer (défaut: 50).",
+        default=100,
+        help="Nombre d'articles à récupérer (défaut: 100).",
     )
     parser.add_argument(
         "--out",
@@ -127,16 +123,23 @@ def main() -> int:
 
     socket.setdefaulttimeout(12.0)
 
-    entries = _rss_fetch(args.rss)
+    keywords = ["IA", "Intelligence Artificielle", "OpenAI", "Technologie"]
+    all_entries: list[dict] = []
+    for keyword in keywords:
+        rss_url = _build_google_news_rss_url(keyword)
+        all_entries.extend(_rss_fetch(rss_url))
 
     articles: list[dict[str, str]] = []
     seen_urls: set[str] = set()
-    for entry in entries:
+    for entry in all_entries:
         if len(articles) >= max(1, args.count):
             break
 
-        title = getattr(entry, "title", None) or "Article IA (titre indisponible)"
-        url = getattr(entry, "link", None) or ""
+        title = str(getattr(entry, "title", "") or "").strip()
+        url = str(getattr(entry, "link", "") or "").strip()
+        if not title or not url:
+            continue
+
         url = str(url).strip()
         if not url or url in seen_urls:
             continue
