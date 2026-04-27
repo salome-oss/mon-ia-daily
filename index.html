@@ -70,6 +70,8 @@
           </div>
         </div>
 
+        <p id="resultsCount" class="mb-4 text-sm text-slate-500">0 articles trouvés pour tes recherches</p>
+
         <div id="status" class="hidden rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-700"></div>
 
         <section
@@ -119,6 +121,62 @@
         return "bg-slate-50 text-slate-700 ring-slate-200";
       }
 
+      function parseDateValue(value) {
+        if (!value) return null;
+        const raw = String(value).trim();
+        if (!raw) return null;
+
+        // Handle ISO date (yyyy-mm-dd) consistently.
+        const isoDateOnly = /^(\d{4})-(\d{2})-(\d{2})$/;
+        const m = raw.match(isoDateOnly);
+        if (m) {
+          return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+        }
+
+        const dt = new Date(raw);
+        if (Number.isNaN(dt.getTime())) return null;
+        return dt;
+      }
+
+      function formatPublicationDate(value) {
+        const dt = parseDateValue(value);
+        if (!dt) return String(value ?? "").trim() || "Date inconnue";
+        return new Intl.DateTimeFormat("fr-FR", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        }).format(dt);
+      }
+
+      function buildDateSearchText(value) {
+        const raw = String(value ?? "").trim().toLowerCase();
+        const dt = parseDateValue(value);
+        if (!dt) return raw;
+
+        const frLong = new Intl.DateTimeFormat("fr-FR", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        })
+          .format(dt)
+          .toLowerCase();
+        const frShort = new Intl.DateTimeFormat("fr-FR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        })
+          .format(dt)
+          .toLowerCase();
+        const ymd = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}-${String(
+          dt.getDate()
+        ).padStart(2, "0")}`;
+        return `${raw} ${frLong} ${frShort} ${ymd}`.trim();
+      }
+
+      function updateResultsCount(count) {
+        $("resultsCount").textContent = `${count} articles trouvés pour tes recherches`;
+      }
+
       function renderArticles(articles) {
         const grid = $("newsGrid");
         grid.innerHTML = "";
@@ -127,6 +185,7 @@
           const tag = escapeHtml(item.tag ?? "Actu");
           const title = escapeHtml(item.title ?? "Sans titre");
           const summary = escapeHtml(item.summary ?? "");
+          const dateLabel = escapeHtml(formatPublicationDate(item.date));
           const url = String(item.url ?? "").trim();
 
           const a11yTitle = title || "Lire l'article";
@@ -156,7 +215,7 @@
               ${summary}
             </p>
 
-            <div class="mt-5">
+            <div class="mt-5 flex items-end justify-between gap-3">
               <a
                 href="${escapeHtml(safeUrl)}"
                 target="_blank"
@@ -167,11 +226,14 @@
                 Lire l'article
                 <span aria-hidden="true" class="text-slate-400">→</span>
               </a>
+              <span class="shrink-0 text-xs text-slate-400">${dateLabel}</span>
             </div>
           `;
 
           grid.appendChild(card);
         }
+
+        updateResultsCount(articles.length);
       }
 
       function filterAndRender() {
@@ -184,7 +246,8 @@
         const filtered = allArticles.filter((item) => {
           const title = String(item.title ?? "").toLowerCase();
           const summary = String(item.summary ?? "").toLowerCase();
-          return title.includes(query) || summary.includes(query);
+          const dateText = buildDateSearchText(item.date);
+          return title.includes(query) || summary.includes(query) || dateText.includes(query);
         });
 
         renderArticles(filtered);
