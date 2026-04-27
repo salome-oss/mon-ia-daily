@@ -8,6 +8,7 @@ import socket
 import time
 import urllib.parse
 from datetime import datetime
+from email.utils import parsedate_to_datetime
 
 
 def _pick_tag(title: str, url: str) -> str:
@@ -37,30 +38,36 @@ def _fake_summary(tag: str, title: str, url: str, published: str | None) -> str:
     )
 
 
-def _dedupe_keep_order(urls: list[str]) -> list[str]:
-    seen: set[str] = set()
-    out: list[str] = []
-    for u in urls:
-        if u in seen:
-            continue
-        seen.add(u)
-        out.append(u)
-    return out
-
-
-def _parse_published(entry) -> str | None:
+def _parse_published(entry) -> tuple[str | None, datetime | None]:
     if getattr(entry, "published_parsed", None):
         try:
-            return time.strftime("%Y-%m-%d", entry.published_parsed)
+            dt = datetime.fromtimestamp(time.mktime(entry.published_parsed))
+            return time.strftime("%Y-%m-%d", entry.published_parsed), dt
         except Exception:
             pass
+
     published = getattr(entry, "published", None)
     if isinstance(published, str) and published.strip():
-        return published.strip()
+        raw = published.strip()
+        try:
+            dt = parsedate_to_datetime(raw)
+            if dt.tzinfo is not None:
+                dt = dt.astimezone().replace(tzinfo=None)
+            return dt.strftime("%Y-%m-%d"), dt
+        except Exception:
+            return raw, None
+
     updated = getattr(entry, "updated", None)
     if isinstance(updated, str) and updated.strip():
-        return updated.strip()
-    return None
+        raw = updated.strip()
+        try:
+            dt = parsedate_to_datetime(raw)
+            if dt.tzinfo is not None:
+                dt = dt.astimezone().replace(tzinfo=None)
+            return dt.strftime("%Y-%m-%d"), dt
+        except Exception:
+            return raw, None
+    return None, None
 
 
 def _rss_fetch(rss_url: str) -> list[dict]:
@@ -89,14 +96,14 @@ def main() -> int:
     )
     parser.add_argument(
         "--rss",
-        default="https://news.google.com/rss/search?q=intelligence+artificielle+2026&hl=fr&gl=FR&ceid=FR:fr",
+        default="https://news.google.com/rss/search?q=intelligence+artificielle+2026+when:30d&hl=fr&gl=FR&ceid=FR:fr",
         help="URL RSS Google News à lire.",
     )
     parser.add_argument(
         "--count",
         type=int,
-        default=5,
-        help="Nombre d'articles à récupérer (défaut: 5).",
+        default=50,
+        help="Nombre d'articles à récupérer (défaut: 50).",
     )
     parser.add_argument(
         "--out",
@@ -110,7 +117,7 @@ def main() -> int:
     entries = _rss_fetch(args.rss)
 
     articles: list[dict[str, str]] = []
-    urls_seen: list[str] = []
+    seen_urls: set[str] = set()
     for entry in entries:
         if len(articles) >= max(1, args.count):
             break
@@ -118,14 +125,12 @@ def main() -> int:
         title = getattr(entry, "title", None) or "Article IA (titre indisponible)"
         url = getattr(entry, "link", None) or ""
         url = str(url).strip()
-        if not url:
+        if not url or url in seen_urls:
             continue
-        urls_seen.append(url)
-        if url in _dedupe_keep_order(urls_seen)[:-1]:
-            continue
+        seen_urls.add(url)
 
         tag = _pick_tag(title, url)
-        published = _parse_published(entry)
+        published, published_dt = _parse_published(entry)
         summary = _fake_summary(tag, title, url, published)
         articles.append(
             {
@@ -133,8 +138,14 @@ def main() -> int:
                 "title": title,
                 "summary": summary,
                 "url": url,
+                "date": published or "",
+                "_sort_ts": published_dt.timestamp() if published_dt else 0.0,
             }
         )
+
+    articles.sort(key=lambda a: a.get("_sort_ts", 0.0), reverse=True)
+    for article in articles:
+        article.pop("_sort_ts", None)
 
     with open(args.out, "w", encoding="utf-8") as f:
         json.dump(articles, f, ensure_ascii=False, indent=2)
