@@ -140,7 +140,7 @@
 
       function formatPublicationDate(value) {
         const dt = parseDateValue(value);
-        if (!dt) return String(value ?? "").trim() || "Date inconnue";
+        if (!dt) return String(value ?? "").trim() || "Aujourd'hui";
         return new Intl.DateTimeFormat("fr-FR", {
           day: "numeric",
           month: "long",
@@ -246,8 +246,14 @@
         const filtered = allArticles.filter((item) => {
           const title = String(item.title ?? "").toLowerCase();
           const summary = String(item.summary ?? "").toLowerCase();
+          const tag = String(item.tag ?? "").toLowerCase();
           const dateText = buildDateSearchText(item.date);
-          return title.includes(query) || summary.includes(query) || dateText.includes(query);
+          return (
+            title.includes(query) ||
+            summary.includes(query) ||
+            tag.includes(query) ||
+            dateText.includes(query)
+          );
         });
 
         renderArticles(filtered);
@@ -270,7 +276,7 @@
       }
 
       async function loadNews() {
-        hideStatus();
+        showStatus("Chargement en cours...");
         try {
           const res = await fetch("news.json", { cache: "no-store" });
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -284,6 +290,8 @@
 
           if (articles.length === 0) {
             showStatus("Aucun article dans news.json pour le moment.");
+          } else {
+            hideStatus();
           }
 
           allArticles = articles;

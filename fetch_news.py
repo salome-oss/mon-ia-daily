@@ -11,13 +11,26 @@ from datetime import datetime
 from email.utils import parsedate_to_datetime
 
 
-def _pick_tag(title: str, url: str) -> str:
-    s = f"{title} {url}".lower()
-    if any(k in s for k in ("regulation", "regulatory", "policy", "government", "commission", "senate", "parliament", "loi", "réglement", "gouvernement", "union européenne", "european")):
-        return "Politique"
-    if any(k in s for k in ("product", "launch", "released", "feature", "app", "outil", "produit", "plateforme", "startup", "lance", "sortie", "beta")):
-        return "Produit"
-    return "Technique"
+def _pick_tag(title: str) -> str:
+    return "Meta" if "meta" in title.lower() else "IA"
+
+
+def _format_fr_date(dt: datetime) -> str:
+    months = [
+        "janvier",
+        "fevrier",
+        "mars",
+        "avril",
+        "mai",
+        "juin",
+        "juillet",
+        "aout",
+        "septembre",
+        "octobre",
+        "novembre",
+        "decembre",
+    ]
+    return f"{dt.day} {months[dt.month - 1]} {dt.year}"
 
 
 def _fake_summary(tag: str, title: str, url: str, published: str | None) -> str:
@@ -42,7 +55,7 @@ def _parse_published(entry) -> tuple[str | None, datetime | None]:
     if getattr(entry, "published_parsed", None):
         try:
             dt = datetime.fromtimestamp(time.mktime(entry.published_parsed))
-            return time.strftime("%Y-%m-%d", entry.published_parsed), dt
+            return _format_fr_date(dt), dt
         except Exception:
             pass
 
@@ -53,9 +66,9 @@ def _parse_published(entry) -> tuple[str | None, datetime | None]:
             dt = parsedate_to_datetime(raw)
             if dt.tzinfo is not None:
                 dt = dt.astimezone().replace(tzinfo=None)
-            return dt.strftime("%Y-%m-%d"), dt
+            return _format_fr_date(dt), dt
         except Exception:
-            return raw, None
+            pass
 
     updated = getattr(entry, "updated", None)
     if isinstance(updated, str) and updated.strip():
@@ -64,9 +77,9 @@ def _parse_published(entry) -> tuple[str | None, datetime | None]:
             dt = parsedate_to_datetime(raw)
             if dt.tzinfo is not None:
                 dt = dt.astimezone().replace(tzinfo=None)
-            return dt.strftime("%Y-%m-%d"), dt
+            return _format_fr_date(dt), dt
         except Exception:
-            return raw, None
+            pass
     return None, None
 
 
@@ -92,11 +105,11 @@ def _rss_fetch(rss_url: str) -> list[dict]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Fetch 5 AI news items via Google News RSS and overwrite news.json."
+        description="Fetch 50 AI news items via Google News RSS and overwrite news.json."
     )
     parser.add_argument(
         "--rss",
-        default="https://news.google.com/rss/search?q=intelligence+artificielle+2026+when:30d&hl=fr&gl=FR&ceid=FR:fr",
+        default="https://news.google.com/rss/search?q=intelligence+artificielle+when:30d&hl=fr&gl=FR&ceid=FR:fr",
         help="URL RSS Google News à lire.",
     )
     parser.add_argument(
@@ -129,8 +142,12 @@ def main() -> int:
             continue
         seen_urls.add(url)
 
-        tag = _pick_tag(title, url)
+        tag = _pick_tag(title)
         published, published_dt = _parse_published(entry)
+        if not published_dt:
+            published_dt = datetime.now()
+        if not published:
+            published = _format_fr_date(published_dt)
         summary = _fake_summary(tag, title, url, published)
         articles.append(
             {
