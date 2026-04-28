@@ -1,0 +1,367 @@
+{
+  "bfm": {
+    "media": "BFM",
+    "owner": "CMA CGM",
+    "political_leaning": "Droite"
+  },
+  "bfmtv": {
+    "media": "BFM TV",
+    "owner": "CMA CGM",
+    "political_leaning": "Droite"
+  },
+  "20 minutes": {
+    "media": "20 Minutes",
+    "owner": "CMI France / Ouest-France",
+    "political_leaning": "Centre"
+  },
+  "franceinfo": {
+    "media": "franceinfo",
+    "owner": "France Televisions / Radio France",
+    "political_leaning": "Gauche"
+  },
+  "france info": {
+    "media": "franceinfo",
+    "owner": "France Televisions / Radio France",
+    "political_leaning": "Gauche"
+  },
+  "le monde": {
+    "media": "Le Monde",
+    "owner": "Le Monde Libre",
+    "political_leaning": "Gauche"
+  },
+  "liberation": {
+    "media": "Liberation",
+    "owner": "Altice France",
+    "political_leaning": "Gauche"
+  },
+  "liberation fr": {
+    "media": "Liberation",
+    "owner": "Altice France",
+    "political_leaning": "Gauche"
+  },
+  "le figaro": {
+    "media": "Le Figaro",
+    "owner": "Groupe Dassault",
+    "political_leaning": "Droite"
+  },
+  "le point": {
+    "media": "Le Point",
+    "owner": "Artemis",
+    "political_leaning": "Droite"
+  },
+  "l express": {
+    "media": "L'Express",
+    "owner": "Next Interactive Media",
+    "political_leaning": "Droite"
+  },
+  "lexpress": {
+    "media": "L'Express",
+    "owner": "Next Interactive Media",
+    "political_leaning": "Droite"
+  },
+  "l opinion": {
+    "media": "L'Opinion",
+    "owner": "Bey Medias",
+    "political_leaning": "Droite"
+  },
+  "lopinion": {
+    "media": "L'Opinion",
+    "owner": "Bey Medias",
+    "political_leaning": "Droite"
+  },
+  "mediapart": {
+    "media": "Mediapart",
+    "owner": "Societe des redacteurs / fondateurs",
+    "political_leaning": "Gauche"
+  },
+  "marianne": {
+    "media": "Marianne",
+    "owner": "CMI France",
+    "political_leaning": "Gauche"
+  },
+  "humanite": {
+    "media": "L'Humanite",
+    "owner": "Societe nouvelle du journal l'Humanite",
+    "political_leaning": "Tres gauche"
+  },
+  "l humanite": {
+    "media": "L'Humanite",
+    "owner": "Societe nouvelle du journal l'Humanite",
+    "political_leaning": "Tres gauche"
+  },
+  "valeurs actuelles": {
+    "media": "Valeurs Actuelles",
+    "owner": "Groupe Valmonde",
+    "political_leaning": "Tres droite"
+  },
+  "causeur": {
+    "media": "Causeur",
+    "owner": "Causeur.fr",
+    "political_leaning": "Droite"
+  },
+  "journaldunet.com": {
+    "media": "Journal du Net",
+    "owner": "CCM Benchmark",
+    "political_leaning": "Centre"
+  },
+  "journal du net": {
+    "media": "Journal du Net",
+    "owner": "CCM Benchmark",
+    "political_leaning": "Centre"
+  },
+  "phonandroid": {
+    "media": "PhonAndroid",
+    "owner": "Humanoid",
+    "political_leaning": "Centre"
+  },
+  "numerama": {
+    "media": "Numerama",
+    "owner": "Humanoid",
+    "political_leaning": "Gauche"
+  },
+  "clubic": {
+    "media": "Clubic",
+    "owner": "Fimalac",
+    "political_leaning": "Centre"
+  },
+  "zdnet": {
+    "media": "ZDNet",
+    "owner": "Red Ventures",
+    "political_leaning": "Centre"
+  },
+  "it social": {
+    "media": "IT Social",
+    "owner": "IT Social",
+    "political_leaning": "Centre"
+  },
+  "les echos": {
+    "media": "Les Echos",
+    "owner": "LVMH",
+    "political_leaning": "Droite"
+  },
+  "la tribune": {
+    "media": "La Tribune",
+    "owner": "Whynot Media",
+    "political_leaning": "Centre"
+  },
+  "capital": {
+    "media": "Capital",
+    "owner": "Prisma Media",
+    "political_leaning": "Droite"
+  },
+  "challenges": {
+    "media": "Challenges",
+    "owner": "Groupe Perdriel",
+    "political_leaning": "Gauche"
+  },
+  "universite de lorraine": {
+    "media": "Universite de Lorraine",
+    "owner": "Universite de Lorraine",
+    "political_leaning": "Centre"
+  },
+  "livres hebdo": {
+    "media": "Livres Hebdo",
+    "owner": "Electre",
+    "political_leaning": "Centre"
+  },
+  "ouest france": {
+    "media": "Ouest-France",
+    "owner": "SIPA - Ouest-France",
+    "political_leaning": "Centre"
+  },
+  "le parisien": {
+    "media": "Le Parisien",
+    "owner": "LVMH",
+    "political_leaning": "Droite"
+  },
+  "the new york times": {
+    "media": "The New York Times",
+    "owner": "The New York Times Company",
+    "political_leaning": "Gauche"
+  },
+  "new york times": {
+    "media": "The New York Times",
+    "owner": "The New York Times Company",
+    "political_leaning": "Gauche"
+  },
+  "nytimes": {
+    "media": "The New York Times",
+    "owner": "The New York Times Company",
+    "political_leaning": "Gauche"
+  },
+  "the washington post": {
+    "media": "The Washington Post",
+    "owner": "Nash Holdings",
+    "political_leaning": "Gauche"
+  },
+  "washington post": {
+    "media": "The Washington Post",
+    "owner": "Nash Holdings",
+    "political_leaning": "Gauche"
+  },
+  "wsj": {
+    "media": "The Wall Street Journal",
+    "owner": "News Corp (Dow Jones)",
+    "political_leaning": "Droite"
+  },
+  "the wall street journal": {
+    "media": "The Wall Street Journal",
+    "owner": "News Corp (Dow Jones)",
+    "political_leaning": "Droite"
+  },
+  "wall street journal": {
+    "media": "The Wall Street Journal",
+    "owner": "News Corp (Dow Jones)",
+    "political_leaning": "Droite"
+  },
+  "reuters": {
+    "media": "Reuters",
+    "owner": "Thomson Reuters",
+    "political_leaning": "Centre"
+  },
+  "associated press": {
+    "media": "Associated Press (AP)",
+    "owner": "Associated Press",
+    "political_leaning": "Centre"
+  },
+  "ap news": {
+    "media": "Associated Press (AP)",
+    "owner": "Associated Press",
+    "political_leaning": "Centre"
+  },
+  "the guardian": {
+    "media": "The Guardian",
+    "owner": "Scott Trust",
+    "political_leaning": "Gauche"
+  },
+  "bbc": {
+    "media": "BBC",
+    "owner": "BBC (public)",
+    "political_leaning": "Centre"
+  },
+  "bloomberg": {
+    "media": "Bloomberg",
+    "owner": "Bloomberg L.P.",
+    "political_leaning": "Centre"
+  },
+  "politico": {
+    "media": "POLITICO",
+    "owner": "Axel Springer",
+    "political_leaning": "Centre"
+  },
+  "the hill": {
+    "media": "The Hill",
+    "owner": "Nexstar Media Group",
+    "political_leaning": "Centre"
+  },
+  "axios": {
+    "media": "Axios",
+    "owner": "Axios Media",
+    "political_leaning": "Centre"
+  },
+  "cnn": {
+    "media": "CNN",
+    "owner": "Warner Bros. Discovery",
+    "political_leaning": "Gauche"
+  },
+  "msnbc": {
+    "media": "MSNBC",
+    "owner": "NBCUniversal (Comcast)",
+    "political_leaning": "Gauche"
+  },
+  "fox news": {
+    "media": "Fox News",
+    "owner": "Fox Corporation",
+    "political_leaning": "Tres droite"
+  },
+  "breitbart": {
+    "media": "Breitbart",
+    "owner": "Breitbart News Network",
+    "political_leaning": "Tres droite"
+  },
+  "the daily wire": {
+    "media": "The Daily Wire",
+    "owner": "Daily Wire, LLC",
+    "political_leaning": "Droite"
+  },
+  "npr": {
+    "media": "NPR",
+    "owner": "NPR (nonprofit)",
+    "political_leaning": "Gauche"
+  },
+  "pbs": {
+    "media": "PBS",
+    "owner": "Public Broadcasting Service",
+    "political_leaning": "Centre"
+  },
+  "techcrunch": {
+    "media": "TechCrunch",
+    "owner": "Yahoo",
+    "political_leaning": "Centre"
+  },
+  "the verge": {
+    "media": "The Verge",
+    "owner": "Vox Media",
+    "political_leaning": "Gauche"
+  },
+  "wired": {
+    "media": "WIRED",
+    "owner": "Condé Nast",
+    "political_leaning": "Gauche"
+  },
+  "the information": {
+    "media": "The Information",
+    "owner": "The Information",
+    "political_leaning": "Centre"
+  },
+  "financial times": {
+    "media": "Financial Times",
+    "owner": "Nikkei",
+    "political_leaning": "Centre"
+  },
+  "xinhua": {
+    "media": "Xinhua",
+    "owner": "Etat (Chine)",
+    "political_leaning": "Tres gauche"
+  },
+  "xinhua news agency": {
+    "media": "Xinhua",
+    "owner": "Etat (Chine)",
+    "political_leaning": "Tres gauche"
+  },
+  "people s daily": {
+    "media": "People's Daily",
+    "owner": "Parti communiste chinois",
+    "political_leaning": "Tres gauche"
+  },
+  "people's daily": {
+    "media": "People's Daily",
+    "owner": "Parti communiste chinois",
+    "political_leaning": "Tres gauche"
+  },
+  "china daily": {
+    "media": "China Daily",
+    "owner": "Etat (Chine)",
+    "political_leaning": "Tres gauche"
+  },
+  "cgtv": {
+    "media": "CGTN",
+    "owner": "CCTV / Etat (Chine)",
+    "political_leaning": "Tres gauche"
+  },
+  "cgtn": {
+    "media": "CGTN",
+    "owner": "CCTV / Etat (Chine)",
+    "political_leaning": "Tres gauche"
+  },
+  "global times": {
+    "media": "Global Times",
+    "owner": "People's Daily (PCC)",
+    "political_leaning": "Tres gauche"
+  },
+  "south china morning post": {
+    "media": "South China Morning Post (SCMP)",
+    "owner": "Alibaba Group",
+    "political_leaning": "Centre"
+  }
+}

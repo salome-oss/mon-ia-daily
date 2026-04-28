@@ -1,315 +1,341 @@
-<!doctype html>
-<html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IA Daily Pulse</title>
-    <meta
-      name="description"
-      content="Veille quotidienne minimaliste et moderne sur l'intelligence artificielle."
-    />
-
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body class="min-h-screen bg-stone-50 text-slate-900">
-    <div class="mx-auto max-w-5xl px-4 py-10 sm:py-14">
-      <header class="mb-10 sm:mb-14">
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">
-              IA Daily Pulse pour Salomé
-            </h1>
-            <p class="mt-2 text-sm text-slate-600">
-              Bonjour Salomé, voici tes actus IA du jour !
-            </p>
-          </div>
-
-          <div class="rounded-xl border border-slate-200 bg-white/70 px-4 py-3 shadow-sm">
-            <p class="text-xs font-medium uppercase tracking-wide text-slate-500">Date</p>
-            <p id="today" class="text-sm font-semibold text-slate-900">—</p>
-          </div>
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI News Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+          },
+          boxShadow: {
+            soft: "0 10px 30px rgba(15, 23, 42, 0.06)",
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="bg-zinc-100 text-zinc-900 antialiased transition-colors duration-300 dark:bg-zinc-950 dark:text-zinc-100">
+  <header class="fixed inset-x-0 top-0 z-50 border-b border-zinc-200/80 bg-zinc-100/90 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/85">
+    <div class="mx-auto flex max-w-6xl items-center gap-3 px-4 py-4 sm:px-6 lg:px-8">
+      <div class="min-w-0 flex-1">
+        <div class="mb-2 flex items-center gap-3">
+          <p class="text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">AI News</p>
+          <span class="rounded-full border border-zinc-200 bg-white px-2 py-0.5 text-[11px] text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-400">Dashboard</span>
         </div>
-      </header>
-
-      <main>
-        <div class="mb-5 flex items-center justify-between">
-          <h2 class="text-lg font-semibold tracking-tight">Dernières actus</h2>
-          <button
-            id="refresh"
-            type="button"
-            class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-300"
-          >
-            Recharger
-          </button>
-        </div>
-
-        <div class="mb-5">
-          <label for="searchInput" class="mb-2 block text-sm font-medium text-slate-700">
-            Rechercher dans les articles
-          </label>
-          <div
-            class="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm focus-within:ring-2 focus-within:ring-slate-300"
-          >
-            <svg
-              class="h-4 w-4 shrink-0 text-slate-400"
-              viewBox="0 0 20 20"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              aria-hidden="true"
-            >
-              <circle cx="9" cy="9" r="6"></circle>
-              <path d="M13.5 13.5L18 18"></path>
+        <label class="relative block">
+          <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-zinc-400">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            <input
-              id="searchInput"
-              type="search"
-              placeholder="Ex: ChatGPT, Meta, open source..."
-              class="w-full border-0 bg-transparent text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none"
-            />
-          </div>
-        </div>
+          </span>
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="Rechercher par titre ou categorie..."
+            class="w-full rounded-2xl border border-zinc-200 bg-white py-3 pl-11 pr-4 text-sm text-zinc-900 outline-none ring-0 transition placeholder:text-zinc-400 focus:border-zinc-300 focus:shadow-soft dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+          />
+        </label>
+      </div>
+      <button
+        id="themeToggle"
+        type="button"
+        class="shrink-0 rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800"
+      >
+        Mode Sombre
+      </button>
+    </div>
+  </header>
 
-        <p id="resultsCount" class="mb-4 text-sm text-slate-500">0 articles trouvés pour tes recherches</p>
+  <main class="mx-auto max-w-6xl px-4 pb-12 pt-32 sm:px-6 lg:px-8">
+    <section class="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <h1 class="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white">Actualites IA</h1>
+        <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400">Un flux epure, trie du plus recent au plus ancien, avec filtrage en temps reel.</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <label class="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
+          <span>Continent</span>
+          <select id="continentSelect" class="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-700 outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200">
+            <option value="all">Tous</option>
+            <option value="Europe">Europe</option>
+            <option value="Amerique du Nord">Amerique du Nord</option>
+            <option value="Amerique du Sud">Amerique du Sud</option>
+            <option value="Asie">Asie</option>
+            <option value="Afrique">Afrique</option>
+            <option value="Oceanie">Oceanie</option>
+            <option value="Inconnu">Inconnu</option>
+          </select>
+        </label>
+        <label class="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
+          <span>Tri</span>
+          <select id="sortSelect" class="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-700 outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200">
+            <option value="recent">Plus recent</option>
+            <option value="political">Bord politique</option>
+          </select>
+        </label>
+        <p id="resultsCount" class="text-sm text-zinc-500 dark:text-zinc-400"></p>
+      </div>
+    </section>
 
-        <div id="status" class="hidden rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-700"></div>
+    <section id="featuredSection" class="mb-6 hidden">
+      <div class="mb-3 flex items-center justify-between">
+        <p class="text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">A la une</p>
+        <p id="featuredHint" class="text-xs text-zinc-400 dark:text-zinc-500"></p>
+      </div>
+      <article
+        id="featuredCard"
+        class="rounded-3xl border border-zinc-200 bg-white p-7 shadow-soft dark:border-zinc-800 dark:bg-zinc-900"
+      ></article>
+    </section>
 
-        <section
-          id="newsGrid"
-          class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
-          aria-label="Articles"
-        ></section>
-      </main>
+    <section id="newsGrid" class="grid gap-4 md:grid-cols-2 xl:grid-cols-3"></section>
 
-      <footer class="mt-12 border-t border-slate-200 pt-6 text-xs text-slate-500">
-        <p>
-          Données chargées depuis <span class="font-mono">news.json</span>. Modifie ce fichier pour
-          publier ta veille.
-        </p>
-      </footer>
+    <div
+      id="emptyState"
+      class="hidden rounded-3xl border border-zinc-200 bg-white p-10 text-center text-sm text-zinc-500 shadow-soft dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400"
+    >
+      Aucun article ne correspond a votre recherche.
     </div>
 
-    <script>
-      const $ = (id) => document.getElementById(id);
-      let allArticles = [];
+    <div
+      id="statusMessage"
+      class="mt-4 text-sm text-zinc-500 dark:text-zinc-400"
+    >
+      Chargement des articles...
+    </div>
+  </main>
 
-      function setToday() {
-        const now = new Date();
-        const formatted = new Intl.DateTimeFormat("fr-FR", {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        }).format(now);
-        $("today").textContent = formatted.charAt(0).toUpperCase() + formatted.slice(1);
+  <script>
+    let articles = [];
+    const searchInput = document.getElementById("searchInput");
+    const newsGrid = document.getElementById("newsGrid");
+    const emptyState = document.getElementById("emptyState");
+    const resultsCount = document.getElementById("resultsCount");
+    const themeToggle = document.getElementById("themeToggle");
+    const statusMessage = document.getElementById("statusMessage");
+    const sortSelect = document.getElementById("sortSelect");
+    const continentSelect = document.getElementById("continentSelect");
+    const featuredSection = document.getElementById("featuredSection");
+    const featuredCard = document.getElementById("featuredCard");
+    const featuredHint = document.getElementById("featuredHint");
+
+    const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
+    const LEANING_ORDER = {
+      "Tres gauche": 0,
+      "Gauche": 1,
+      "Centre": 2,
+      "Droite": 3,
+      "Tres droite": 4,
+      "A verifier": 5
+    };
+
+    function formatRelativeDate(dateString) {
+      const date = new Date(dateString);
+      const now = new Date();
+      const diffMs = now - date;
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+      if (diffDays <= 0) return "Aujourd'hui";
+      if (diffDays === 1) return "Il y a 1 jour";
+      if (diffDays < 30) return `Il y a ${diffDays} jours`;
+
+      return new Intl.DateTimeFormat("fr-FR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      }).format(date);
+    }
+
+    function isWithinThirtyDays(dateString) {
+      const now = new Date();
+      const articleDate = new Date(dateString);
+      return now - articleDate <= THIRTY_DAYS_MS;
+    }
+
+    function createCard(article) {
+      const card = document.createElement("article");
+      card.className = "group rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-soft dark:border-zinc-800 dark:bg-zinc-900";
+      const summary = (article.summary_fr || article.summary || "").trim();
+      card.innerHTML = `
+        <div class="mb-5 flex items-center justify-between gap-3">
+          <div class="flex flex-wrap gap-2">
+            <span class="inline-flex rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-medium text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">${article.category}</span>
+            <span class="inline-flex rounded-full border border-zinc-200 bg-white px-3 py-1 text-xs font-medium text-zinc-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300">${article.political_leaning || "Centre"}</span>
+            <span class="inline-flex rounded-full border border-zinc-200 bg-white px-3 py-1 text-xs font-medium text-zinc-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300">${article.continent || "Inconnu"}</span>
+          </div>
+          <span class="text-xs text-zinc-400 dark:text-zinc-500">${formatRelativeDate(article.published_at)}</span>
+        </div>
+        <h2 class="mb-3 text-lg font-semibold leading-snug tracking-tight text-zinc-900 dark:text-zinc-50">${article.title}</h2>
+        ${summary ? `<p class="mb-5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-300" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${summary}</p>` : ""}
+        <div class="mb-5 space-y-1 text-sm text-zinc-500 dark:text-zinc-400">
+          <p><span class="font-medium text-zinc-700 dark:text-zinc-200">Media:</span> ${article.source || "Source inconnue"}</p>
+          <p><span class="font-medium text-zinc-700 dark:text-zinc-200">Proprietaire:</span> ${article.owner || "Non renseigne"}</p>
+        </div>
+        <div class="flex items-center justify-between gap-4">
+          <p class="text-sm text-zinc-500 dark:text-zinc-400">${new Intl.DateTimeFormat("fr-FR", { dateStyle: "medium" }).format(new Date(article.published_at))}</p>
+          <a href="${article.url}" target="_blank" rel="noopener noreferrer" class="rounded-xl border border-zinc-200 px-3 py-2 text-sm font-medium text-zinc-800 transition hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-800">Lire</a>
+        </div>
+      `;
+      return card;
+    }
+
+    function isSameDay(a, b) {
+      return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+    }
+
+    function pickFeaturedArticle(items) {
+      const now = new Date();
+      const scored = items.map((article) => {
+        const published = new Date(article.published_at);
+        let score = 0;
+        if (isSameDay(published, now)) score += 1000;
+        if (article.category === "Politique") score += 80;
+        if (article.category === "Economie") score += 60;
+        if (article.category === "Mise a jour") score += 40;
+        if (article.category === "Communication") score += 20;
+        score += Math.max(0, 100 - Math.floor((now - published) / (1000 * 60 * 10))); // freshness (10 min buckets)
+        return { article, score, published };
+      });
+
+      scored.sort((a, b) => b.score - a.score || b.published - a.published);
+      return scored.length ? scored[0].article : null;
+    }
+
+    function renderFeatured(article) {
+      if (!article) {
+        featuredSection.classList.add("hidden");
+        featuredCard.innerHTML = "";
+        featuredHint.textContent = "";
+        return;
       }
 
-      function escapeHtml(value) {
-        return String(value)
-          .replaceAll("&", "&amp;")
-          .replaceAll("<", "&lt;")
-          .replaceAll(">", "&gt;")
-          .replaceAll('"', "&quot;")
-          .replaceAll("'", "&#039;");
-      }
+      featuredSection.classList.remove("hidden");
+      featuredHint.textContent = `Selection: ${formatRelativeDate(article.published_at)}`;
+      const summary = (article.summary_fr || article.summary || "").trim();
 
-      function tagClasses(tag) {
-        const t = String(tag || "").toLowerCase();
-        if (t.includes("tech")) return "bg-sky-50 text-sky-700 ring-sky-200";
-        if (t.includes("produit")) return "bg-emerald-50 text-emerald-700 ring-emerald-200";
-        if (t.includes("polit")) return "bg-amber-50 text-amber-800 ring-amber-200";
-        return "bg-slate-50 text-slate-700 ring-slate-200";
-      }
-
-      function parseDateValue(value) {
-        if (!value) return null;
-        const raw = String(value).trim();
-        if (!raw) return null;
-
-        // Handle ISO date (yyyy-mm-dd) consistently.
-        const isoDateOnly = /^(\d{4})-(\d{2})-(\d{2})$/;
-        const m = raw.match(isoDateOnly);
-        if (m) {
-          return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
-        }
-
-        const dt = new Date(raw);
-        if (Number.isNaN(dt.getTime())) return null;
-        return dt;
-      }
-
-      function formatPublicationDate(value) {
-        const dt = parseDateValue(value);
-        if (!dt) return String(value ?? "").trim() || "Aujourd'hui";
-        return new Intl.DateTimeFormat("fr-FR", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-        }).format(dt);
-      }
-
-      function buildDateSearchText(value) {
-        const raw = String(value ?? "").trim().toLowerCase();
-        const dt = parseDateValue(value);
-        if (!dt) return raw;
-
-        const frLong = new Intl.DateTimeFormat("fr-FR", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-        })
-          .format(dt)
-          .toLowerCase();
-        const frShort = new Intl.DateTimeFormat("fr-FR", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        })
-          .format(dt)
-          .toLowerCase();
-        const ymd = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}-${String(
-          dt.getDate()
-        ).padStart(2, "0")}`;
-        return `${raw} ${frLong} ${frShort} ${ymd}`.trim();
-      }
-
-      function updateResultsCount(count) {
-        $("resultsCount").textContent = `${count} articles trouvés pour tes recherches`;
-      }
-
-      function renderArticles(articles) {
-        const grid = $("newsGrid");
-        grid.innerHTML = "";
-
-        for (const item of articles) {
-          const tag = escapeHtml(item.tag ?? "Actu");
-          const title = escapeHtml(item.title ?? "Sans titre");
-          const summary = escapeHtml(item.summary ?? "");
-          const dateLabel = escapeHtml(formatPublicationDate(item.date));
-          const url = String(item.url ?? "").trim();
-
-          const a11yTitle = title || "Lire l'article";
-          const safeUrl =
-            url && (url.startsWith("https://") || url.startsWith("http://") || url.startsWith("/"))
-              ? url
-              : "#";
-
-          const card = document.createElement("article");
-          card.className =
-            "group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md";
-
-          card.innerHTML = `
-            <div class="flex items-center justify-between gap-3">
-              <span class="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ring-1 ring-inset ${tagClasses(
-                tag
-              )}">
-                ${tag}
-              </span>
+      featuredCard.innerHTML = `
+        <div class="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+          <div class="min-w-0">
+            <div class="mb-3 flex flex-wrap items-center gap-2">
+              <span class="inline-flex rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-medium text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">${article.category}</span>
+              <span class="inline-flex rounded-full border border-zinc-200 bg-white px-3 py-1 text-xs font-medium text-zinc-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300">${article.political_leaning || "Centre"}</span>
+              <span class="inline-flex rounded-full border border-zinc-200 bg-white px-3 py-1 text-xs font-medium text-zinc-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300">${article.continent || "Inconnu"}</span>
             </div>
-
-            <h3 class="mt-4 line-clamp-2 text-base font-semibold tracking-tight text-slate-900">
-              ${title}
-            </h3>
-
-            <p class="mt-2 line-clamp-4 text-sm leading-relaxed text-slate-600">
-              ${summary}
-            </p>
-
-            <div class="mt-5 flex items-end justify-between gap-3">
-              <a
-                href="${escapeHtml(safeUrl)}"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="${escapeHtml(a11yTitle)}"
-                class="inline-flex items-center gap-2 text-sm font-semibold text-slate-900 underline decoration-slate-300 underline-offset-4 transition group-hover:decoration-slate-500"
-              >
-                Lire l'article
-                <span aria-hidden="true" class="text-slate-400">→</span>
-              </a>
-              <span class="shrink-0 text-xs text-slate-400">${dateLabel}</span>
+            <h2 class="text-2xl font-semibold leading-snug tracking-tight text-zinc-900 dark:text-zinc-50">${article.title}</h2>
+            ${summary ? `<p class="mt-4 text-sm leading-relaxed text-zinc-600 dark:text-zinc-300" style="display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;">${summary}</p>` : ""}
+            <div class="mt-4 grid gap-1 text-sm text-zinc-500 dark:text-zinc-400">
+              <p><span class="font-medium text-zinc-700 dark:text-zinc-200">Media:</span> ${article.source || "Source inconnue"}</p>
+              <p><span class="font-medium text-zinc-700 dark:text-zinc-200">Proprietaire:</span> ${article.owner || "Non renseigne"}</p>
+              <p>${new Intl.DateTimeFormat("fr-FR", { dateStyle: "full", timeStyle: "short" }).format(new Date(article.published_at))}</p>
             </div>
-          `;
+          </div>
+          <div class="shrink-0">
+            <a href="${article.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm font-medium text-zinc-800 transition hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800">
+              Lire l'article
+            </a>
+          </div>
+        </div>
+      `;
+    }
 
-          grid.appendChild(card);
-        }
-
-        updateResultsCount(articles.length);
-      }
-
-      function filterAndRender() {
-        const query = $("searchInput").value.trim().toLowerCase();
-        if (!query) {
-          renderArticles(allArticles);
-          return;
-        }
-
-        const filtered = allArticles.filter((item) => {
-          const title = String(item.title ?? "").toLowerCase();
-          const summary = String(item.summary ?? "").toLowerCase();
-          const tag = String(item.tag ?? "").toLowerCase();
-          const dateText = buildDateSearchText(item.date);
-          return (
-            title.includes(query) ||
-            summary.includes(query) ||
-            tag.includes(query) ||
-            dateText.includes(query)
-          );
+    function sortArticles(items) {
+      if (sortSelect.value === "political") {
+        return [...items].sort((a, b) => {
+          const leaningDelta = (LEANING_ORDER[a.political_leaning || "Centre"] ?? 2) - (LEANING_ORDER[b.political_leaning || "Centre"] ?? 2);
+          if (leaningDelta !== 0) return leaningDelta;
+          return new Date(b.published_at) - new Date(a.published_at);
         });
-
-        renderArticles(filtered);
       }
 
-      function showStatus(message, kind = "info") {
-        const el = $("status");
-        el.classList.remove("hidden");
-        el.textContent = message;
-        el.className =
-          "rounded-xl border p-4 text-sm " +
-          (kind === "error"
-            ? "border-rose-200 bg-rose-50 text-rose-800"
-            : "border-slate-200 bg-white text-slate-700");
+      return [...items].sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
+    }
+
+    function renderArticles() {
+      const query = searchInput.value.trim().toLowerCase();
+      const selectedContinent = continentSelect.value;
+
+      const filteredArticles = sortArticles(articles
+        .filter((article) => isWithinThirtyDays(article.published_at))
+        .filter((article) => article.source && article.source !== "Source inconnue")
+        .filter((article) => selectedContinent === "all" ? true : (article.continent || "Inconnu") === selectedContinent)
+        .filter((article) => {
+          const haystack = `${article.title} ${article.category} ${article.source || ""} ${article.owner || ""} ${article.political_leaning || ""} ${article.continent || ""}`.toLowerCase();
+          return haystack.includes(query);
+        }));
+
+      const featured = pickFeaturedArticle(filteredArticles);
+      renderFeatured(featured);
+
+      const listArticles = featured
+        ? filteredArticles.filter((a) => a.url !== featured.url)
+        : filteredArticles;
+
+      newsGrid.innerHTML = "";
+
+      if (listArticles.length === 0 && !featured) {
+        emptyState.classList.remove("hidden");
+      } else {
+        emptyState.classList.add("hidden");
+        listArticles.forEach((article) => newsGrid.appendChild(createCard(article)));
       }
 
-      function hideStatus() {
-        const el = $("status");
-        el.classList.add("hidden");
-      }
+      const visibleCount = listArticles.length + (featured ? 1 : 0);
+      resultsCount.textContent = `${visibleCount} article${visibleCount > 1 ? "s" : ""} visible${visibleCount > 1 ? "s" : ""}`;
+      statusMessage.textContent = visibleCount > 0
+        ? (sortSelect.value === "political" ? "Articles IA classes par bord politique du media valide." : "Articles IA des 30 derniers jours avec media identifie.")
+        : "";
+    }
 
-      async function loadNews() {
-        showStatus("Chargement en cours...");
-        try {
-          const res = await fetch("news.json", { cache: "no-store" });
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-          const data = await res.json();
-          const articles = Array.isArray(data) ? data : data.articles;
-
-          if (!Array.isArray(articles)) {
-            throw new Error("Format inattendu: attendu un tableau ou { articles: [...] }");
-          }
-
-          if (articles.length === 0) {
-            showStatus("Aucun article dans news.json pour le moment.");
-          } else {
-            hideStatus();
-          }
-
-          allArticles = articles;
-          filterAndRender();
-        } catch (err) {
-          showStatus(
-            `Impossible de charger news.json. Ouvre index.html via un serveur local (pas en double-clic) ou vérifie le fichier. Détail: ${err.message}`,
-            "error"
-          );
-          allArticles = [];
-          renderArticles([]);
+    async function loadArticles() {
+      try {
+        const response = await fetch("./news.json", { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
         }
-      }
 
-      setToday();
-      $("searchInput").addEventListener("input", filterAndRender);
-      $("refresh").addEventListener("click", loadNews);
-      loadNews();
-    </script>
-  </body>
+        const data = await response.json();
+        if (!Array.isArray(data)) {
+          throw new Error("Format JSON invalide");
+        }
+
+        articles = data;
+        renderArticles();
+      } catch (error) {
+        newsGrid.innerHTML = "";
+        emptyState.classList.remove("hidden");
+        resultsCount.textContent = "0 article visible";
+        statusMessage.textContent = "Impossible de charger news.json. Ouvre la page via un serveur local ou attends la mise a jour GitHub Action.";
+        console.error(error);
+      }
+    }
+
+    function applyTheme(theme) {
+      document.documentElement.classList.toggle("dark", theme === "dark");
+      themeToggle.textContent = theme === "dark" ? "Mode Clair" : "Mode Sombre";
+    }
+
+    const savedTheme = localStorage.getItem("theme");
+    const initialTheme = savedTheme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    applyTheme(initialTheme);
+
+    themeToggle.addEventListener("click", () => {
+      const nextTheme = document.documentElement.classList.contains("dark") ? "light" : "dark";
+      localStorage.setItem("theme", nextTheme);
+      applyTheme(nextTheme);
+    });
+
+    searchInput.addEventListener("input", renderArticles);
+    sortSelect.addEventListener("change", renderArticles);
+    continentSelect.addEventListener("change", renderArticles);
+
+    loadArticles();
+  </script>
+</body>
 </html>
